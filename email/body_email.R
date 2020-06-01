@@ -53,23 +53,8 @@ breakdown_cashout <- df_summary_kategori %>%
               list(`Growth` = positive_growth_formatter))
 
 
-plot <- df_transaksi_2_minggu %>% 
-  group_by(tanggal, tipe) %>% 
-  summarise_if(is.numeric, list(sum)) %>% 
-  ggplot(aes(tanggal, amount, colour = tipe)) +
-  geom_line() +
-  scale_y_continuous(labels=scales::comma_format()) +
-  scale_x_date(labels = scales::date_format("%d %b")) +
-  labs(title = "Daily Topup and Cashout",
-       subtitle = paste(tanggal_awal_dua_minggu_lalu, " - ", tanggal_akhir_minggu_lalu),
-       colour = "",
-       x = "",
-       y = "") +
-  theme_minimal()
 
-plot_email <- add_ggplot(plot)
-
-email <- compose_email(
+body_email <- compose_email(
   body = md(glue::glue("
      Dear Leaders,
      
@@ -97,10 +82,8 @@ email <- compose_email(
 
   {block_spacer()}
 
-  {plot_email}
-
   ")),
   footer = "This is an automatically generated email. For any inquiry please email to data@gmail.com")
 
-email
+body_email
 
