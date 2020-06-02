@@ -34,9 +34,12 @@ RUN  . /etc/environment \
     --repos 'http://www.bioconductor.org/packages/release/bioc' \
     --repos $MRAN \ 
     #--deps TRUE \
-    rpart
+    rpart here
+
+COPY . /root/api/    
     
 EXPOSE 8000
 WORKDIR /root
+
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(rev(commandArgs())[1]); pr$run(host='0.0.0.0', port=8000, swagger=TRUE)"]
-CMD ["/usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R"]
+CMD ["/root/api/plumber.R"]
