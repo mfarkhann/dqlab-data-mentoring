@@ -1,4 +1,5 @@
 library(dplyr)
+library(rpart)
 
 get_species <- function(id, data, model) {
   
@@ -16,7 +17,7 @@ get_species <- function(id, data, model) {
     stop("ID Tidak ada")
   }
   
-  df_predict$species <- predict(model,df_predict)
+  df_predict$species <- predict(model, df_predict, type = 'class')
   
   return(df_predict)
 }

@@ -4,7 +4,7 @@ suppressPackageStartupMessages({
   options(scipen = 99)
 })
 
-model <- readRDS(here::here('api','data','model_knn.rds'))
+model <- readRDS(here::here('api','data','model.rds'))
 irisData <- readRDS(here::here('api','data','iris_data.rds'))
 
 #* @param id fill the ID Data

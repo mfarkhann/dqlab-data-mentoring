@@ -1,24 +1,17 @@
-library(caret)
-set.seed(26)
+library(dplyr)
+library(rpart)
 
 # Split the data
-sample <- createDataPartition(iris$Species, p=0.80, list=FALSE)
+set.seed(26)
+row_train <- sample(1:nrow(iris), 0.8 * nrow(iris)) 
+iris_train <- iris[row_train,]
+iris_test <- iris[-row_train,]
 
-# Create training data
-iris_train <- iris[sample,]
+# Generate Model
+treeFit <- rpart(Species~.,data=iris_train,method = 'class')
 
-# Create test data
-iris_test <- iris[-sample,]
+# Predict on Test
+iris_prediction <- predict(treeFit, iris_test,type = 'class')
+table(iris_prediction, iris_test$Species)
 
-control <- trainControl(method='cv', number=10)
-metric <- 'Accuracy'
-
-
-fit.knn <- train(Species~., data=iris_train, method='knn', 
-                 trControl=control, metric=metric)
-
-
-iris_prediction <- predict(fit.knn, iris_test)
-confusionMatrix(iris_prediction, iris_test$Species)
-
-saveRDS(fit.knn, here::here('api','data','model_knn.rds'))
+saveRDS(treeFit, here::here('api','data','model.rds'))
